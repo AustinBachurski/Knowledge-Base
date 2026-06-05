@@ -6,7 +6,7 @@
 
 #### In page links
 - [Tables](#tables)<br>
-- [Links & Images](#links-images)<br>
+- [Links & Images](#links--images)<br>
 - [Markdown In Page Links](#markdown-in-page-links)<br>
 
 
