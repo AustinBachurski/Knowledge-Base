@@ -6,8 +6,8 @@
 
 > `std::iterator_category<I>` is the concept taking your iterator as template parameter `I`, where as `std::iterator_category_tag` is the iterator trait tag.<br>
  
-- Replace `:TYPE:` with the iterable type.<br>
-- Replace `:ITERATOR_CATEGORY:` with the std::iterator_category.<br>
+- Replace `:TYPE:` with the iterable container.<br>
+- Replace `:ITERATOR_CATEGORY:` with the `std::iterator_category` listed below.<br>
 
 ```cpp
 export template <typename T> class :TYPE:Iterator {
@@ -36,7 +36,7 @@ static_assert(std:::ITERATOR_CATEGORY:<:TYPE:Iterator<int>>);
 > Each tag adds further requirements that build on the lesser tags.
 
 | Iterator | Operators | Details |
-|-|-|-|-|
+|-|-|-|
 | `input_or_output_iterator` | `++`, `*`                                         | The `input_or_output_iterator` concept forms the basis of the iterator concept taxonomy; every iterator type satisfies the `input_or_output_iterator` requirements. |
 | `input_iterator`           | `++`, `*`                                         | The `input_iterator` concept is a refinement of `input_or_output_iterator`, adding the requirement that the referenced values can be read (via `indirectly_readable`) and the requirement that the iterator concept tag be present. ***Clarification:*** *`input_or_output_iterator` doesn't require `operator*` to be readable (think `std::back_inserter`), where as `input_iterator` requires readable.* |
 | `forward_iterator`         | `++`, `*`, `==`                                   | This concept refines `input_iterator` by requiring that the iterator also models `incrementable` (thereby making it suitable for multi-pass algorithms), and guaranteeing that two iterators to the same range can be compared against each other. ***Clarification:*** *previous iterators modeled `weakly_incrementable` which does not guarantee that two copies of an iterator `a` and `b` will be equal if they are both incremented (think of a stream).* |
