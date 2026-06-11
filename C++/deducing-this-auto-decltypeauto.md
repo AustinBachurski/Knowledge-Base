@@ -23,6 +23,7 @@ Must consider the return type deduction rules if using `auto`!<br>
 [Back to Top](#deducing-this-auto--decltypeauto)
 
 `auto` discards references and top-level cv-qualifiers and references, meaning:
+
 ```cpp
 auto func() { 
   static constexpr auto value{42};
@@ -49,6 +50,22 @@ If you need the reference and/or the cv-qualifiers to be retained, use a return 
 [Back to Top](#deducing-this-auto--decltypeauto)
 
 Defining the return value of a function as `decltype(auto)` will deduce the type with reference and cv-qualifiers.
+
+```cpp
+  template <typename Self>
+  [[nodiscard]] constexpr auto at(this Self &&self, size_type position)
+      -> decltype(auto) {
+    if (position >= self.size_) {
+      throw std::out_of_range(
+          std::format("Vector Range Check: position (which is {}) >= "
+                      "this->size() (which is {})",
+                      position, self.size_));
+    }
+    return std::forward_like<Self>(self.data_[position]);
+  }
+```
+
+>Just remember that `std::forward_like` returns a reference!
 
 - if the value category of expression is xvalue, then decltype yields `T&&`.
 - if the value category of expression is lvalue, then decltype yields `T&`.
