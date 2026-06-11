@@ -51,7 +51,7 @@ Heading tag is a single `#` with all lowercase text.
 [Location](#heading)
 ```
 
-NOTE: All `:`, `&`, and <code>``</code>characters will be stripped, so to link to <code>## Concept for `std::random_access_iterator`</code> use the following.
+NOTE: All `:`, `&`, `()`, `->`, `.` and <code>``</code>characters will be stripped, so to link to <code>## Concept for `std::random_access_iterator`</code> use the following.
 
 ```markdown
 [Concept for `std::random_access_iterator`](#concept-for-stdrandom_access_iterator)
