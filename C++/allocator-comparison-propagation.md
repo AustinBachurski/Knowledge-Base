@@ -143,22 +143,22 @@ There's also a nice write up on [Stack Overflow](https://stackoverflow.com/quest
 
 ```cpp
 // Example usage.
-  constexpr auto swap(Vector &other) noexcept -> void {
-    if constexpr (std::allocator_traits<
-                      Allocator>::propagate_on_container_swap::value) {
-      using std::swap;
-      swap(allocator_, other.allocator_);
-    } else if constexpr (!std::allocator_traits<
-                             Allocator>::is_always_equal::value) {
-      contract_assert(
-          allocator_ != other.allocator_ &&
-          "If propagate_on_container_swap is not provided or is derived from "
-          "std::false_type and the allocators of the two containers do not "
-          "compare equal, the behavior of container swap is undefined.");
-    }
+constexpr auto swap(Vector &other) noexcept -> void {
+if constexpr (std::allocator_traits<
+                  Allocator>::propagate_on_container_swap::value) {
+  using std::swap;
+  swap(allocator_, other.allocator_);
+} else if constexpr (!std::allocator_traits<
+                         Allocator>::is_always_equal::value) {
+  contract_assert(
+      allocator_ != other.allocator_ &&
+      "If propagate_on_container_swap is not provided or is derived from "
+      "std::false_type and the allocators of the two containers do not "
+      "compare equal, the behavior of container swap is undefined.");
+}
 
-    std::swap(data_, other.data_);
-    std::swap(size_, other.size_);
-    std::swap(capacity_, other.capacity_);
-  }
+std::swap(data_, other.data_);
+std::swap(size_, other.size_);
+std::swap(capacity_, other.capacity_);
+}
 ```
