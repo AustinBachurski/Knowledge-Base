@@ -2,13 +2,14 @@
 
 [Back to README.md](../README.md)
 
-*Definitions and concepts sourced from [cppreference.com](https://en.cppreference.com/named_req/Allocator).*
+*Definitions and concepts sourced from [cppreference.com](https://cppreference.com/cpp/named_req/Allocator).*
 
 #### In page links
 - [Comparing Allocators](#comparing-allocators)<br>
 - [Construction](#construction)<br>
 - [Propagate on Container Copy Assignment](#propagate-on-container-copy-assignment)<br>
 - [Propagate on Container Move Assignment](#propagate-on-container-move-assignment)<br>
+- [Propagate on Container Swap](#propagate-on-container-swap)<br>
 
 ## Comparing Allocators
 
@@ -129,3 +130,35 @@ When the two allocators do not compare as equal, storage allocated by `a1` canno
 ```
 
 There's also a nice write up on [Stack Overflow](https://stackoverflow.com/questions/27471053/example-usage-of-propagate-on-container-move-assignment).
+
+## Propagate on Container Swap
+
+[Back to Top](#allocator-comparisons--propagation)
+
+**`propagate_on_container_swap:`**
+
+- `std::true_type` or derived from it if the allocators of type `A` need to be swapped when two containers that use them are swapped.
+- If this member is std::true_type or derived from it, type `A` must satisfy Swappable and the swap operation must not throw exceptions.
+- If this member is not provided or derived from `std::false_type` and the allocators of the two containers do not compare equal, the behavior of container swap is undefined.
+
+```cpp
+// Example usage.
+  constexpr auto swap(Vector &other) noexcept -> void {
+    if constexpr (std::allocator_traits<
+                      Allocator>::propagate_on_container_swap::value) {
+      using std::swap;
+      swap(allocator_, other.allocator_);
+    } else if constexpr (!std::allocator_traits<
+                             Allocator>::is_always_equal::value) {
+      contract_assert(
+          allocator_ != other.allocator_ &&
+          "If propagate_on_container_swap is not provided or is derived from "
+          "std::false_type and the allocators of the two containers do not "
+          "compare equal, the behavior of container swap is undefined.");
+    }
+
+    std::swap(data_, other.data_);
+    std::swap(size_, other.size_);
+    std::swap(capacity_, other.capacity_);
+  }
+```
